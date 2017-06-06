@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backlog"
+    tools:context="com.example.user.zurura.Register_user">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Username"
+            android:inputType="textPersonName"
+            android:textColorHint="@color/common_google_signin_btn_text_dark_pressed" />
+
+        <EditText
+            android:id="@+id/emailtxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:textColorHint="@color/common_google_signin_btn_text_dark_pressed" />
+
+        <EditText
+            android:id="@+id/passwordtxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textColorHint="@color/common_google_signin_btn_text_dark_pressed" />
+
+        <Button
+            android:id="@+id/registerbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="Register" />
+
+        <EditText
+            android:id="@+id/textviewSignin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Already registered. Sign in!"
+            android:textAlignment="center"
+            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:textColorHint="@color/common_google_signin_btn_text_dark_pressed" />
+
+    </LinearLayout>
+
+</RelativeLayout>

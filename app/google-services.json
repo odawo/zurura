@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "924504430249",
+    "firebase_url": "https://zurura-bb549.firebaseio.com",
+    "project_id": "zurura-bb549",
+    "storage_bucket": "zurura-bb549.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924504430249:android:bdd617df25be3c55",
+        "android_client_info": {
+          "package_name": "com.example.user.zurura"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "924504430249-aeqvmqe5pqatnavdvug8550k3sfje42u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAn0fa9WmP00WWYmRVIV3GHsinrQLjyI3g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
