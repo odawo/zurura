@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backlog"
+    android:background="@drawable/ic_backlog"
     tools:context="com.example.user.zurura.Login">
 
     <LinearLayout
@@ -13,15 +13,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:hint="Username"
-            android:inputType="textPersonName"
-            android:textColorHint="@color/common_google_signin_btn_text_dark_pressed" />
 
         <EditText
             android:id="@+id/emailtxt"
@@ -42,16 +33,17 @@
             android:textColorHint="@color/common_google_signin_btn_text_dark_pressed" />
 
         <Button
-            android:id="@+id/register"
+            android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:text="Login" />
 
-        <EditText
+        <TextView
             android:id="@+id/textviewSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="15dp"
             android:text="Not registered? Sign up!"
             android:textAlignment="center"
             android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
