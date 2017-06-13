@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() != null){
             finish();
-            startActivity(new Intent(getApplicationContext(), Register_user.class));
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         }
 
         edittxt_email = (EditText)findViewById(R.id.emailtxt);
@@ -79,7 +79,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     //ic_profile activity
                     // change the destination oncick class after the intent to the age created
                     finish();
-                    startActivity(new Intent(getApplicationContext(), Profile.class));
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 }
             }
         });

@@ -2,15 +2,13 @@ package com.example.user.zurura;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.StrictMode;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -94,7 +92,7 @@ public class Register_user extends AppCompatActivity {
                         Toast.makeText(Register_user.this, "karibu", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
 
-                        startActivity(new Intent(Register_user.this, Profile.class));
+                        startActivity(new Intent(Register_user.this, HomeActivity.class));
                     }
                     else{
                         Toast.makeText(Register_user.this, "Account creation error. Retry!", Toast.LENGTH_SHORT).show();
