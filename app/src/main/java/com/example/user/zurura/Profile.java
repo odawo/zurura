@@ -19,6 +19,7 @@ public class Profile extends Fragment {
     FirebaseAuth firebaseAuth;
     TextView nameText;
     static String name;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
