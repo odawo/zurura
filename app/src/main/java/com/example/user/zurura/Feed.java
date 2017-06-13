@@ -10,7 +10,7 @@ import android.view.ViewGroup;
  * Created by paul on 12/06/2017.
  */
 
-public class Tab3Feed extends Fragment{
+public class Feed extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
