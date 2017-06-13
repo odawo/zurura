@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,27 +17,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class Login extends AppCompatActivity implements View.OnClickListener {
+public class Login extends AppCompatActivity {
 
     Button button_login;
     EditText edittxt_email;
     EditText edit_pass;
     TextView textView_signup;
-    FirebaseAuth firebaseAuth;
     ProgressDialog progressDialog;
+    FirebaseAuth firebaseAuth;
+    FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser() != null){
-            finish();
-            startActivity(new Intent(getApplicationContext(), Register_user.class));
-        }
 
         edittxt_email = (EditText)findViewById(R.id.emailtxt);
         edit_pass = (EditText)findViewById(R.id.passwordtxt);
@@ -44,8 +40,58 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         button_login = (Button)findViewById(R.id.login);
 
         progressDialog = new ProgressDialog(this);
-        button_login.setOnClickListener(this);
-        textView_signup.setOnClickListener(this);
+
+        //firebase instance
+        firebaseAuth = FirebaseAuth.getInstance();
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                //check user presence
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                if(firebaseUser != null)
+                {
+                    Intent intent = new Intent(Login.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }
+        };
+        firebaseAuth.addAuthStateListener(authStateListener);
+
+        //onclick listeners for sign up textview and login button
+        textView_signup.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(Login.this, Register_user.class));
+            }
+        });
+
+        button_login.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                progressDialog.setTitle("User login");
+                progressDialog.setMessage(" logging in ...");
+                progressDialog.show();
+
+                userLogin();
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseAuth.removeAuthStateListener(authStateListener);
     }
 
     private void userLogin()
@@ -53,45 +99,32 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         String email = edittxt_email.getText().toString().trim();
         String password = edit_pass.getText().toString().trim();
 
-        if(TextUtils.isEmpty(email)) {
-            //empty email and the return function stops from the function executing further
-            Toast.makeText(this, "Please fill email field",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(password)){
-            //empty password
-            Toast.makeText(this, "Please fill password field",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        //progress dialog shows after validation
-        progressDialog.setMessage(" Welcome " + email +" ... ");
-        progressDialog.show();
-
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
-                {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task)
+        if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password))
+        {
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>()
             {
-                progressDialog.dismiss();
-                if(task.isSuccessful())
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task)
                 {
-                    //ic_profile activity
-                    // change the destination oncick class after the intent to the age created
-                    finish();
-                    startActivity(new Intent(getApplicationContext(), Profile.class));
+                    if(task.isSuccessful())
+                    {
+                        progressDialog.dismiss();
+                        Intent intent = new Intent(Login.this, HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    } else
+                        {
+                        Toast.makeText(Login.this, "Unable to login user", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        }
                 }
+            });
+        }else
+            {
+                Toast.makeText(Login.this, "please fill in email and password", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
-        });
+
     }
 
-    @Override
-    public void onClick(View view) {
-        if(view == button_login){
-            userLogin();
-        }
-        if(view == textView_signup){
-            startActivity(new Intent(this, Register_user.class));
-        }
-    }
 }

@@ -3,6 +3,7 @@ package com.example.user.zurura;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.StrictMode;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Register_user extends AppCompatActivity {
 
@@ -50,9 +52,17 @@ public class Register_user extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth)
             {
                 //checks user
-
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                if(firebaseUser != null)
+                {
+                    Intent intent = new Intent(Register_user.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
             }
         };
+
+        firebaseAuth.addAuthStateListener(authStateListener);
 
         //set onclick listeners
         button.setOnClickListener(new View.OnClickListener()
@@ -77,6 +87,18 @@ public class Register_user extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseAuth.removeAuthStateListener(authStateListener);
+    }
+
     private  void registerUser()
     {
         String email = edit_email.getText().toString().trim();
@@ -94,9 +116,8 @@ public class Register_user extends AppCompatActivity {
                         Toast.makeText(Register_user.this, "karibu", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
 
-                        startActivity(new Intent(Register_user.this, Profile.class));
-                    }
-                    else{
+                        startActivity(new Intent(Register_user.this, HomeActivity.class));
+                    } else{
                         Toast.makeText(Register_user.this, "Account creation error. Retry!", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
