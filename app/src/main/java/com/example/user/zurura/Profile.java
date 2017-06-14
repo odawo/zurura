@@ -25,7 +25,7 @@ public class Profile extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.tab1_profile, container, false);
-        nameText = (TextView)rootView.findViewById(R.id.section_label);
+        nameText = (TextView)rootView.findViewById(R.id.user_useremail);
         firebaseAuth = FirebaseAuth.getInstance();
         nameText.setText(firebaseAuth.getCurrentUser().getEmail());
         return rootView;
