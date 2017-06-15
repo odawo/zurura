@@ -4,13 +4,13 @@
     tools:context="com.example.user.zurura.HomeActivity1">
 
     <item
-        android:id="@+id/action_logout"
+        android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/settings"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_logout"
         android:orderInCategory="100"
         android:title="@string/logout" />
 </menu>
