@@ -12,59 +12,72 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignEnd="@+id/locText"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_toLeftOf="@+id/imageButton"
-        android:layout_toStartOf="@+id/imageButton"
-        android:adjustViewBounds="false"
-        android:background="@android:drawable/ic_menu_camera"
-        android:scaleType="matrix" />
+        android:layout_alignRight="@+id/locText"
+        android:layout_marginEnd="23dp"
+        android:layout_marginRight="23dp"
+        android:layout_marginTop="26dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/dancing"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/locText"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/descText"
+        android:layout_marginTop="52dp"
+        android:layout_toLeftOf="@+id/places"
+        android:ems="10"
+        android:hint="Where are you?"
+        android:paddingLeft="5dp"
+        android:textSize="19sp" />
 
     <EditText
         android:id="@+id/descText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="47dp"
         android:ems="10"
+        android:hint="What's happening?"
         android:inputType="textPersonName"
-        android:text="Description"
-        android:layout_below="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView5"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_alignWithParentIfMissing="false"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/descText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/imageView" />
 
     <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_camera"
-        android:layout_marginBottom="22dp"
-        android:layout_marginRight="76dp"
-        android:layout_marginEnd="76dp"
         android:layout_above="@+id/descText"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginBottom="59dp"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp"
+        android:layout_toRightOf="@+id/imageView"
+        android:scaleType="centerInside"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <Button
         android:id="@+id/post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Post"
-        android:layout_below="@+id/mapView5"
-        android:layout_toLeftOf="@+id/imageButton"
-        android:layout_toStartOf="@+id/imageButton"
-        android:layout_marginTop="22dp" />
+        android:layout_below="@+id/places"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp" />
+
+    <Button
+        android:id="@+id/places"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Place"
+        android:layout_alignBaseline="@+id/locText"
+        android:layout_alignBottom="@+id/locText"
+        android:layout_toRightOf="@+id/post"
+        android:layout_toEndOf="@+id/post" />
 
 
 </RelativeLayout>

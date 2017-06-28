@@ -52,7 +52,7 @@ public class Profile extends Fragment {
    // ImageButton upload_btn;
     ImageButton save_btn;
     //ImageButton edit_btn;
-    TextView username_text;
+    //TextView username_text;
     TextView email_text;
 
     ProgressDialog progressDialog;
@@ -125,8 +125,6 @@ public class Profile extends Fragment {
                         databaseReference.child("imageurl").setValue(imageurl.toString());
 
                         progressDialog.dismiss();
-
-                       // username_text.setEnabled(false);
                     }
                 });
             }else{
