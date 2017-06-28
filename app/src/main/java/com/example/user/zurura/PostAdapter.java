@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -27,6 +28,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     private Context mContext;
     private List<Post> postList;
+    FirebaseAuth firebaseAuth;
+
 
 
 
@@ -64,8 +67,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Post post = postList.get(position);
         final FirebaseStorage storage = FirebaseStorage.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        holder.username.setText("Username");
+        holder.username.setText(firebaseAuth.getCurrentUser().getEmail());
         holder.location.setText(post.getLocation());
         holder.description.setText(post.getDescription());
         holder.time.setText(post.getTimestamp());
