@@ -12,9 +12,8 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior= "@string/appbar_scrolling_view_behavior" />
-
-
+        android:background="@color/place_autocomplete_prediction_primary_text_highlight"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

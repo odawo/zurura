@@ -4,13 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_google_signin_btn_text_light_disabled"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
     tools:context="com.example.user.zurura.Login">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/zururaname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_margin="30dp"
+        android:text="ZURURA"
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        android:textSize="40dp"
+        android:elevation="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/inputlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:elevation="10dp"
         android:orientation="vertical">
 
         <EditText
@@ -20,7 +39,7 @@
             android:layout_margin="15dp"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:textColorHint="@color/common_google_signin_btn_text_dark_pressed" />
+            android:textColorHint="@color/common_google_signin_btn_text_light_disabled" />
 
         <EditText
             android:id="@+id/passwordtxt"
@@ -29,7 +48,7 @@
             android:layout_margin="15dp"
             android:hint="Password"
             android:inputType="textPassword"
-            android:textColorHint="@color/common_google_signin_btn_text_dark_pressed" />
+            android:textColorHint="@color/common_google_signin_btn_text_light_disabled" />
 
         <Button
             android:id="@+id/login"
@@ -39,13 +58,56 @@
             android:text="Login" />
 
         <TextView
+            android:id="@+id/textviewForgotpass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password?"
+            android:textAlignment="center"
+            android:textColor="@color/common_google_signin_btn_text_light_default"
+            android:textColorHint="@color/common_google_signin_btn_text_dark_pressed" />
+
+        <LinearLayout
+            android:id="@+id/viewlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/inputlayout"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <View
+                android:layout_width="200dp"
+                android:layout_height="1dp"
+                android:layout_margin="20dp"
+                android:background="#c4c8c9" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="OR" />
+
+            <View
+                android:layout_width="200dp"
+                android:layout_height="1dp"
+                android:layout_margin="20dp"
+                android:background="#c4c8c9" />
+
+        </LinearLayout>
+
+
+        <TextView
             android:id="@+id/textviewSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:text="Not registered? Sign up!"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/viewlayout"
+            android:text="Get that account."
             android:textAlignment="center"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+            android:textColor="@color/common_google_signin_btn_text_light_default" />
 
     </LinearLayout>
 

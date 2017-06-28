@@ -24,6 +24,8 @@ public class Register_user extends AppCompatActivity {
     EditText edit_email;
     EditText edit_pass;
     TextView textViewlogin;
+    TextView forgot_pass;
+
     ProgressDialog progressDialog;
     FirebaseAuth firebaseAuth;
     FirebaseAuth.AuthStateListener authStateListener;
@@ -36,6 +38,7 @@ public class Register_user extends AppCompatActivity {
         button = (Button)findViewById(R.id.registerbtn);
         edit_email = (EditText)findViewById(R.id.emailtxt);
         edit_pass = (EditText)findViewById(R.id.passwordtxt);
+        forgot_pass = (TextView)findViewById(R.id.textviewForgotpass);
         textViewlogin = (TextView)findViewById(R.id.textviewSignin);
 
         //progress dialog instance
@@ -48,7 +51,7 @@ public class Register_user extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth)
             {
-                //checks user
+                //checks user account presence
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if(firebaseUser != null)
                 {
@@ -61,19 +64,30 @@ public class Register_user extends AppCompatActivity {
 
         firebaseAuth.addAuthStateListener(authStateListener);
 
-        //set onclick listeners
+        //register user onclick listener
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
                 progressDialog.setTitle("Create Account");
                 progressDialog.setMessage(" Registering user ...");
+                progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
 
                 registerUser();
             }
         });
 
+        //forgot password onclick listener
+        forgot_pass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Register_user.this, ForgotPass.class));
+                    finish();
+            }
+        });
+
+        //login page onclick listener
         textViewlogin.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -113,7 +127,7 @@ public class Register_user extends AppCompatActivity {
                         Toast.makeText(Register_user.this, "karibu", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
 
-                        startActivity(new Intent(Register_user.this, HomeActivity.class));
+                        startActivity(new Intent(Register_user.this, Profile.class));
 
                     } else{
                         Toast.makeText(Register_user.this, "Account creation error. Retry!", Toast.LENGTH_SHORT).show();
