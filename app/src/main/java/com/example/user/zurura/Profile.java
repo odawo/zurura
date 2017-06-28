@@ -1,140 +1,212 @@
 package com.example.user.zurura;
 
-import android.nfc.Tag;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
-/**
- * Created by paul on 12/06/2017.
- */
+import java.net.URI;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class Profile extends Fragment {
 
     FirebaseAuth firebaseAuth;
-    TextView nameText;
-    static String name;
+    FirebaseAuth.AuthStateListener authStateListener;
+    DatabaseReference databaseReference;
+    StorageReference storageReference;
+    FirebaseUser firebaseUser;
 
-    ImageButton imageButton_edit;
+    ImageView userprofile_view;
+   // ImageButton upload_btn;
     ImageButton save_btn;
-    TextView username_textView;
-    TextView email_textView;
-    Button password_btn;
+    //ImageButton edit_btn;
+    //TextView username_text;
+    TextView email_text;
+
+    ProgressDialog progressDialog;
+
+    Uri imageHoldurl = null;
+
+    private static final  int REQUEST_CAMERA = 1;
+    private static final  int SELECT_IMAGE =1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.tab1_profile, container, false);
-        nameText = (TextView)rootView.findViewById(R.id.user_useremail);
-        imageButton_edit = (ImageButton)rootView.findViewById(R.id.menu_edit);
-        firebaseAuth = FirebaseAuth.getInstance();
-        nameText.setText(firebaseAuth.getCurrentUser().getEmail());
 
-        email_textView = (TextView)rootView.findViewById(R.id.user_username);
-        username_textView = (TextView)rootView.findViewById(R.id.user_useremail);
-        password_btn = (Button) rootView.findViewById(R.id.user_userpasswordbtn);
+        userprofile_view = (ImageView) rootView.findViewById(R.id.user_profile_photo);
+        //upload_btn = (ImageButton) rootView.findViewById(R.id.add_photo);
         save_btn = (ImageButton) rootView.findViewById(R.id.user_usersavebtn);
+        //edit_btn = (ImageButton) rootView.findViewById(R.id.menu_edit);
+        //username_text = (TextView) rootView.findViewById(R.id.user_username);
+        email_text = (TextView) rootView.findViewById(R.id.user_useremail);
 
-        if(imageButton_edit.performClick()){
-            imageButton_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        progressDialog = new ProgressDialog(getActivity());
 
-                    email_textView.setClickable(true);
-                    username_textView.setClickable(true);
-                    password_btn.setClickable(true);
-                    save_btn.setVisibility(View.VISIBLE);
+        firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("user").child(firebaseAuth.getCurrentUser().getUid());
+        storageReference = FirebaseStorage.getInstance().getReference();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                    save_btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String username = username_textView.getText().toString().trim();
-                            final String email = email_textView.getText().toString().trim();
-                            final String password = password_btn.getText().toString().trim();
-
-                            final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                            AuthCredential authCredential = EmailAuthProvider.getCredential(email,password);
-                            //user prompted to re-provide their login credentials
-                            firebaseUser.reauthenticate(authCredential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                        firebaseUser.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()){
-                                                    Log.d(email,"email updated");
-                                                }else {
-                                                    Log.d(email,"error email not updated. Retry.");
-                                                }
-                                            }
-                                        });
-                                    }else {
-                                        Log.d(email,"Error authentication failure");
-                                    }
-                                }
-
-                            });
+        //display current user's email on profile page
+        email_text.setText(firebaseAuth.getCurrentUser().getEmail());
+       // username_text.setText(firebaseAuth.getCurrentUser().getDisplayName());
 
 
-                            password_btn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                                    AuthCredential authCredential = EmailAuthProvider.getCredential(email,password);
-                                    //user prompted to re-provide their login credentials
-                                    firebaseUser.reauthenticate(authCredential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()){
-                                                firebaseUser.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()){
-                                                            Log.d(password,"password changeded");
-                                                        }else {
-                                                            Log.d(password,"error password not changed. Retry.");
-                                                        }
-                                                    }
-                                                });
-                                            } else {
-                                                Log.d(password, "Error authentication failure");
-                                            }
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
 
-            });
-        }
-        else {
-            email_textView.setClickable(false);
-            username_textView.setClickable(false);
-            password_btn.setClickable(false);
-            save_btn.setVisibility(View.INVISIBLE);
-        }
+        save_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveuserprofile();
+            }
+        });
+
+        userprofile_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setprofpic();
+            }
+        });
 
         return rootView;
+    }
 
+    private void saveuserprofile(){
+
+            if(imageHoldurl != null){
+
+                progressDialog.setMessage("loading");
+                progressDialog.show();
+
+                StorageReference childStorageReference = storageReference.child("profile").child(imageHoldurl.getLastPathSegment());
+                String picurl = imageHoldurl.getLastPathSegment();
+
+                childStorageReference.putFile(imageHoldurl).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        final Uri imageurl = taskSnapshot.getDownloadUrl();
+
+                        databaseReference.child("userid").setValue(firebaseAuth.getCurrentUser().getUid());
+                        databaseReference.child("imageurl").setValue(imageurl.toString());
+
+                        progressDialog.dismiss();
+                    }
+                });
+            }else{
+                Toast.makeText(getActivity(), "Please select a profile picture", Toast.LENGTH_LONG).show();
+            }
+    }
+
+    private void setprofpic(){
+        //dialog to choose pic source
+        final CharSequence[] items = {"Take Photo","Choose from Gallery","Cancel"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Upload Photo");
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if(items[item].equals("Take Photo")){
+                    camIntent();
+                }else if(items[item].equals("Choose from Gallery")){
+                    galleryIntent();
+                }else if(items[item].equals("Cancel")){
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    //take cam pic
+    private void camIntent(){
+        try{
+            Log.d("data","entered here");
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_CAMERA);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //take img from gallery
+    private void galleryIntent(){
+        try {
+            Log.d("data","entered here");
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("img/*");
+            startActivityForResult(intent, SELECT_IMAGE);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode,resultCode,data);
+
+        if(requestCode == SELECT_IMAGE && resultCode == RESULT_OK){
+            Uri selectedimg = data.getData();
+            CropImage.activity(selectedimg).
+                    setGuidelines(CropImageView.Guidelines.ON).
+                    setAspectRatio(1,1).start(getActivity());
+        }
+        else if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK){
+            Uri selectedimg = data.getData();
+            CropImage.activity(selectedimg).
+                    setGuidelines(CropImageView.Guidelines.ON).
+                     setAspectRatio(1,1).start(getActivity());
+        }
+
+        //image crop
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+
+            CropImage.ActivityResult activityResult = CropImage.getActivityResult(data);
+
+            if(resultCode == RESULT_OK){
+                imageHoldurl = activityResult.getUri();
+                userprofile_view.setImageURI(imageHoldurl);
+
+            }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
+
+                Exception erException = activityResult.getError();
+            }
+        }
     }
 }

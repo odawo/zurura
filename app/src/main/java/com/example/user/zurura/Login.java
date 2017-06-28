@@ -1,9 +1,11 @@
 package com.example.user.zurura;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,7 +26,11 @@ public class Login extends AppCompatActivity {
     EditText edittxt_email;
     EditText edit_pass;
     TextView textView_signup;
+    TextView forgot_pass;
+
     ProgressDialog progressDialog;
+    Snackbar snackbar;
+
     FirebaseAuth firebaseAuth;
     FirebaseAuth.AuthStateListener authStateListener;
 
@@ -35,8 +41,9 @@ public class Login extends AppCompatActivity {
 
         edittxt_email = (EditText)findViewById(R.id.emailtxt);
         edit_pass = (EditText)findViewById(R.id.passwordtxt);
-        textView_signup = (TextView)findViewById(R.id.textviewSignup);
         button_login = (Button)findViewById(R.id.login);
+        forgot_pass = (TextView)findViewById(R.id.textviewForgotpass);
+        textView_signup = (TextView)findViewById(R.id.textviewSignup);
 
         progressDialog = new ProgressDialog(this);
 
@@ -67,13 +74,22 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        forgot_pass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Login.this, ForgotPass.class));
+                finish();
+            }
+        });
         button_login.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                progressDialog.setTitle("User login");
-                progressDialog.setMessage(" logging in ...");
+                //progressDialog.setTitle("User login");
+                progressDialog.setMessage(" logging in ");
+                progressDialog.setProgressStyle(AlertDialog.THEME_HOLO_DARK);
+                progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
 
                 userLogin();

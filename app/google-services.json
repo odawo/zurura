@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "924504430249-r3k8827ohqn2cfab4eaent2kho2pdv8p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.user.zurura",
+            "certificate_hash": "ed6a4033b306c8a20821351713ced6bac29ae17b"
+          }
+        },
+        {
+          "client_id": "924504430249-g4pj07gukvh48umkn0k7tlcptomrbvrg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.user.zurura",
+            "certificate_hash": "d3b30ebfe6f89ad362e0d0854777ce3595294c5f"
+          }
+        },
+        {
           "client_id": "924504430249-aeqvmqe5pqatnavdvug8550k3sfje42u.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +45,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "924504430249-aeqvmqe5pqatnavdvug8550k3sfje42u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
