@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -61,7 +63,7 @@ public class Status extends Fragment implements OnConnectionFailedListener {
     Button postButton;
     Button placeButton;
     EditText descText;
-    EditText locText;
+    TextView locText;
 
     Bitmap imageBitmap;
     private GoogleApiClient mGoogleApiClient;
@@ -76,7 +78,7 @@ public class Status extends Fragment implements OnConnectionFailedListener {
         imageButton = (ImageButton) rootView.findViewById(R.id.imageButton);
         imageView = (ImageView) rootView.findViewById(R.id.imageView);
         descText = (EditText) rootView.findViewById((R.id.descText));
-        locText = (EditText) rootView.findViewById((R.id.locText));
+        locText = (TextView) rootView.findViewById((R.id.locText));
         postButton = (Button) rootView.findViewById(R.id.post);
         placeButton = (Button) rootView.findViewById(R.id.places);
         firebaseDatabase = FirebaseDatabase.getInstance().getReference();
@@ -106,44 +108,58 @@ public class Status extends Fragment implements OnConnectionFailedListener {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!TextUtils.isEmpty(descText.getText().toString().trim()) && !TextUtils.isEmpty(locText.getText().toString().trim())) {
 
 
-                // Create a storage reference from our app
-                StorageReference storageRef = storage.getReference();
-                final String filename = System.currentTimeMillis() + user.getUid();
-                StorageReference mountainsRef = storageRef.child(filename);
+                    // Create a storage reference from our app
+                    StorageReference storageRef = storage.getReference();
+                    final String filename = System.currentTimeMillis() + user.getUid();
+                    StorageReference mountainsRef = storageRef.child(filename);
 //                imageView.setDrawingCacheEnabled(true);
 //                imageView.buildDrawingCache();
-                Bitmap bitmap = imageBitmap;
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
+                    Bitmap bitmap = imageBitmap;
+                    if (bitmap != null) {
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        byte[] data = baos.toByteArray();
 
-                UploadTask uploadTask = mountainsRef.putBytes(data);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
+                        UploadTask uploadTask = mountainsRef.putBytes(data);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                Date date = new Date(System.currentTimeMillis());
+                                DateFormat formatter = new SimpleDateFormat("HH:mm");
+                                String dateFormatted = formatter.format(date);
+                                Post newPost = new Post(descText.getText().toString(), locText.getText().toString(), dateFormatted, null, user.getUid());
+                                firebaseDatabase.child("posts").push().setValue(newPost);
+                                Toast.makeText(getActivity(), "Status Posted", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                Date date = new Date(System.currentTimeMillis());
+                                DateFormat formatter = new SimpleDateFormat("HH:mm");
+                                String dateFormatted = formatter.format(date);
+                                Post newPost = new Post(descText.getText().toString(), locText.getText().toString(), dateFormatted, filename, user.getUid());
+                                firebaseDatabase.child("posts").push().setValue(newPost);
+                                Toast.makeText(getActivity(), "Status Posted", Toast.LENGTH_SHORT).show();
+
+
+                            }
+                        });
                     }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    else{
                         Date date = new Date(System.currentTimeMillis());
                         DateFormat formatter = new SimpleDateFormat("HH:mm");
                         String dateFormatted = formatter.format(date);
-                        Post newPost = new Post(descText.getText().toString(),locText.getText().toString(),dateFormatted,filename,user.getUid());
+                        Post newPost = new Post(descText.getText().toString(), locText.getText().toString(), dateFormatted, null, user.getUid());
                         firebaseDatabase.child("posts").push().setValue(newPost);
-
-                        Toast.makeText(getActivity(),"Status Posted",Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(getActivity(), "Status Posted", Toast.LENGTH_SHORT).show();
                     }
-                });
-
-
-
-
+                    } else {
+                        Toast.makeText(getActivity(), "Kindly fill in all fields", Toast.LENGTH_SHORT).show();
+                    }
 
             }
         });

@@ -69,19 +69,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         holder.location.setText(post.getLocation());
         holder.description.setText(post.getDescription());
         holder.time.setText(post.getTimestamp());
-        StorageReference photoRef = storage.getReferenceFromUrl("gs://zurura-bb549.appspot.com").child(post.getPhotoUrl());
-
-        final long ONE_MEGABYTE = 1024 * 1024;
-        //download file as a byte array
-        photoRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                holder.thumbnail.setImageBitmap(bitmap);
-            }
-        });
-
-
+        if(post.getPhotoUrl()!=null) {
+            StorageReference photoRef = storage.getReferenceFromUrl("gs://zurura-bb549.appspot.com").child(post.getPhotoUrl());
+            final long ONE_MEGABYTE = 1024 * 1024;
+            //download file as a byte array
+            photoRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    holder.thumbnail.setImageBitmap(bitmap);
+                }
+            });
+        }else {
+            holder.thumbnail.setImageResource(R.drawable.dancing);
+        }
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
