@@ -1,19 +1,31 @@
 package com.example.user.zurura;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -33,6 +45,10 @@ public class HomeActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
     FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    DatabaseReference firebaseDatabase;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +69,15 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         //firebase instance
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference();
+        firebaseStorage = FirebaseStorage.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null)
         {
             finish();
             startActivity(new Intent(this, Login.class));
         }
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
     }
 
 
@@ -88,7 +106,32 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void user_settings() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.dialog_username, null);
+        final EditText usernamet = (EditText)view.findViewById(R.id.textuser);
+        ImageButton save = (ImageButton)view.findViewById(R.id.savedialogbtn);
 
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!TextUtils.isEmpty(usernamet.getText().toString().trim())){
+
+                    //create storage reference
+                   // storageReference = firebaseStorage.getReference();
+                   // StorageReference jnrStorageReference = storageReference.child("");
+                    firebaseDatabase.child("user").child((firebaseUser.getUid())).setValue(usernamet.getText().toString());
+                    Toast.makeText(HomeActivity.this,"username set to" +usernamet.getText(),Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(HomeActivity.this,"kindly fill in username",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     private void user_logout() {

@@ -10,74 +10,94 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.user.zurura.HomeActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignEnd="@+id/locText"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/relativeLayout"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/locText"
-        android:layout_marginEnd="23dp"
-        android:layout_marginRight="23dp"
-        android:layout_marginTop="26dp"
-        android:adjustViewBounds="true"
-        android:background="@drawable/dancing"
-        android:scaleType="fitXY" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-    <TextView
-        android:id="@+id/locText"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="26dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/dancing"
+            android:scaleType="fitXY"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            app:srcCompat="@android:drawable/ic_menu_camera"
+            android:layout_marginRight="11dp"
+            android:layout_marginEnd="11dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/relativeLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/descText"
-        android:layout_marginTop="52dp"
-        android:layout_toLeftOf="@+id/places"
-        android:ems="10"
-        android:hint="Where are you?"
-        android:paddingLeft="5dp"
-        android:textSize="19sp" />
+        android:id="@+id/relativeLayout2">
 
-    <EditText
-        android:id="@+id/descText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="47dp"
-        android:ems="10"
-        android:hint="What's happening?"
-        android:inputType="textPersonName"
-        android:layout_below="@+id/imageView" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/descText"
-        android:layout_marginBottom="59dp"
-        android:layout_marginLeft="19dp"
-        android:layout_marginStart="19dp"
-        android:layout_toRightOf="@+id/imageView"
-        android:scaleType="centerInside"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+        <EditText
+            android:id="@+id/descText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="What's happening?"
+            android:inputType="textPersonName"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp" />
 
-    <Button
-        android:id="@+id/post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Post"
-        android:layout_below="@+id/places"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp" />
+        <TextView
+            android:id="@+id/locText"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="Where are you?"
+            android:paddingLeft="5dp"
+            android:textSize="19sp"
+            android:layout_marginTop="97dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
-    <Button
-        android:id="@+id/places"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose Place"
-        android:layout_alignBaseline="@+id/locText"
-        android:layout_alignBottom="@+id/locText"
-        android:layout_toRightOf="@+id/post"
-        android:layout_toEndOf="@+id/post" />
+        <Button
+            android:id="@+id/places"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:textSize="11dp"
+            android:text="My location"
+            android:layout_toEndOf="@+id/locText"
+            android:layout_alignTop="@+id/locText"
+            android:layout_marginTop="0dp"/>
+
+        <Button
+            android:id="@+id/post"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Post"
+            android:layout_marginTop="165dp"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+
 
 
 </RelativeLayout>

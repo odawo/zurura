@@ -6,4 +6,6 @@
     <string name="title_activity_home">Zurura</string>
     <string name="logout">logout</string>
     <string name="settings">settings</string>
+    <string name="username">Username</string>
+    <string name="set_change_username">set/change username</string>
 </resources>

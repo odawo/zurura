@@ -52,7 +52,7 @@ public class Profile extends Fragment {
    // ImageButton upload_btn;
     ImageButton save_btn;
     //ImageButton edit_btn;
-    //TextView username_text;
+    TextView username_text;
     TextView email_text;
 
     ProgressDialog progressDialog;
@@ -72,20 +72,32 @@ public class Profile extends Fragment {
         //upload_btn = (ImageButton) rootView.findViewById(R.id.add_photo);
         save_btn = (ImageButton) rootView.findViewById(R.id.user_usersavebtn);
         //edit_btn = (ImageButton) rootView.findViewById(R.id.menu_edit);
-        //username_text = (TextView) rootView.findViewById(R.id.user_username);
+        username_text = (TextView) rootView.findViewById(R.id.user_username);
         email_text = (TextView) rootView.findViewById(R.id.user_useremail);
 
         progressDialog = new ProgressDialog(getActivity());
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("user").child(firebaseAuth.getCurrentUser().getUid());
+        DatabaseReference otherDatabaseReference = FirebaseDatabase.getInstance().getReference().child("user");
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //display current user's email on profile page
         email_text.setText(firebaseAuth.getCurrentUser().getEmail());
-       // username_text.setText(firebaseAuth.getCurrentUser().getDisplayName());
+        otherDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot child : dataSnapshot.getChildren()){
+                username_text.setText(child.getValue().toString());
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         save_btn.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +170,7 @@ public class Profile extends Fragment {
         try{
             Log.d("data","entered here");
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.setType("img/*");
             startActivityForResult(intent, REQUEST_CAMERA);
         } catch (Exception e){
             e.printStackTrace();

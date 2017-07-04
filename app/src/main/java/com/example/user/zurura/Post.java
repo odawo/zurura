@@ -12,7 +12,7 @@ public class Post {
     public String photoUrl;
     public String userID;
 
-    public Post() {
+    public Post(String s, Object o, String uid) {
     }
 
     public Post(String description, String location, String timestamp, String photoUrl, String userID) {
