@@ -30,9 +30,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     private List<Post> postList;
     FirebaseAuth firebaseAuth;
 
-
-
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView username, location,description,time;
         public ImageView thumbnail, overflow;
@@ -67,9 +64,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Post post = postList.get(position);
         final FirebaseStorage storage = FirebaseStorage.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
 
-        holder.username.setText(firebaseAuth.getCurrentUser().getEmail());
+
+        holder.username.setText(post.getUserID());
         holder.location.setText(post.getLocation());
         holder.description.setText(post.getDescription());
         holder.time.setText(post.getTimestamp());

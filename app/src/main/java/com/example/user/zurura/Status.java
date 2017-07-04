@@ -64,6 +64,8 @@ public class Status extends Fragment implements OnConnectionFailedListener {
     Button placeButton;
     EditText descText;
     TextView locText;
+    FirebaseAuth firebaseAuth;
+
 
     Bitmap imageBitmap;
     private GoogleApiClient mGoogleApiClient;
@@ -82,6 +84,7 @@ public class Status extends Fragment implements OnConnectionFailedListener {
         postButton = (Button) rootView.findViewById(R.id.post);
         placeButton = (Button) rootView.findViewById(R.id.places);
         firebaseDatabase = FirebaseDatabase.getInstance().getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseStorage storage = FirebaseStorage.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         mGoogleApiClient = new GoogleApiClient
@@ -127,12 +130,7 @@ public class Status extends Fragment implements OnConnectionFailedListener {
                         uploadTask.addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
-                                Date date = new Date(System.currentTimeMillis());
-                                DateFormat formatter = new SimpleDateFormat("HH:mm");
-                                String dateFormatted = formatter.format(date);
-                                Post newPost = new Post(descText.getText().toString(), locText.getText().toString(), dateFormatted, null, user.getUid());
-                                firebaseDatabase.child("posts").push().setValue(newPost);
-                                Toast.makeText(getActivity(), "Status Posted", Toast.LENGTH_SHORT).show();
+
                             }
                         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -141,10 +139,9 @@ public class Status extends Fragment implements OnConnectionFailedListener {
                                 Date date = new Date(System.currentTimeMillis());
                                 DateFormat formatter = new SimpleDateFormat("HH:mm");
                                 String dateFormatted = formatter.format(date);
-                                Post newPost = new Post(descText.getText().toString(), locText.getText().toString(), dateFormatted, filename, user.getUid());
+                                Post newPost = new Post(descText.getText().toString(), locText.getText().toString(), dateFormatted, filename, firebaseAuth.getCurrentUser().getEmail());
                                 firebaseDatabase.child("posts").push().setValue(newPost);
                                 Toast.makeText(getActivity(), "Status Posted", Toast.LENGTH_SHORT).show();
-
 
                             }
                         });
@@ -153,7 +150,7 @@ public class Status extends Fragment implements OnConnectionFailedListener {
                         Date date = new Date(System.currentTimeMillis());
                         DateFormat formatter = new SimpleDateFormat("HH:mm");
                         String dateFormatted = formatter.format(date);
-                        Post newPost = new Post(descText.getText().toString(), locText.getText().toString(), dateFormatted, null, user.getUid());
+                        Post newPost = new Post(descText.getText().toString(), locText.getText().toString(), dateFormatted, null, firebaseAuth.getCurrentUser().getEmail());
                         firebaseDatabase.child("posts").push().setValue(newPost);
                         Toast.makeText(getActivity(), "Status Posted", Toast.LENGTH_SHORT).show();
                     }
